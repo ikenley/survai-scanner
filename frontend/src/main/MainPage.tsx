@@ -10,23 +10,13 @@ const MainPage = () => {
   return (
     <div className="main-page">
       <Navbar />
-      <Container maxWidth="sm" component="main" sx={{ mt: 3 }}>
-        <Typography
-          component="h1"
-          variant="h2"
-          align="center"
-          color="text.primary"
-          gutterBottom
-        >
-          Pun GenerAItor
+      <Container maxWidth="sm" component="main" sx={{ mt: 2 }}>
+        <Typography component="h1" variant="h3" color="text.primary">
+          SurvAI
         </Typography>
-        <Typography
-          variant="h5"
-          align="center"
-          color="text.secondary"
-          component="p"
-        >
-          A very simple AI client
+        <Typography variant="body1" color="text.secondary" component="p">
+          Transcribe paper surveys using AI (because everything must use AI
+          these days)
         </Typography>
         <PunPanel />
       </Container>

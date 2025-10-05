@@ -43,7 +43,7 @@ const Navbar = () => {
           noWrap
           sx={{ display: { xs: "none", md: "flex" } }}
         >
-          GenerAItor
+          SurvAI
         </Typography>
         <Box sx={{ flexGrow: 1, display: { xs: "flex" } }}>
           <Link
@@ -57,31 +57,7 @@ const Navbar = () => {
               textDecoration: "none",
             }}
           >
-            Pun
-          </Link>
-          <Link
-            className="navbar-link"
-            component={RouterLink}
-            to="/ai/image"
-            sx={{ ml: 2, my: 3, display: "block", textDecoration: "none" }}
-          >
-            Image
-          </Link>
-          <Link
-            className="navbar-link"
-            component={RouterLink}
-            to="/ai/storybook"
-            sx={{ ml: 2, my: 3, display: "block", textDecoration: "none" }}
-          >
-            Storybook
-          </Link>
-          <Link
-            className="navbar-link"
-            component={RouterLink}
-            to="/ai/chat"
-            sx={{ ml: 2, my: 3, display: "block", textDecoration: "none" }}
-          >
-            Chat
+            Surveys
           </Link>
         </Box>
         {user === null ? (
@@ -106,7 +82,10 @@ const Navbar = () => {
               open={Boolean(anchorEl)}
               onClose={handleClose}
             >
-              <MenuItem href="https://github.com/ikenley/ai-app" component="a">
+              <MenuItem
+                href="https://github.com/ikenley/survai-scanner"
+                component="a"
+              >
                 <ListItemIcon>
                   <GitHubIcon fontSize="small" />
                 </ListItemIcon>
