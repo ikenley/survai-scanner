@@ -3,7 +3,7 @@ import { container } from "tsyringe";
 import { SQSEvent, Context } from "aws-lambda";
 import { SSMClient } from "@aws-sdk/client-ssm";
 import registerJobRunnerDependencies from "./loaders/registerJobRunnerDependencies";
-import JobRunnerService from "./components/image/JobRunnerService";
+import JobRunnerService from "./components/survey/JobRunnerService";
 import SsmParamLoader from "./loaders/SsmParamLoader";
 
 let jobRunnerService: JobRunnerService | null = null;

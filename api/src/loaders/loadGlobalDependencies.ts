@@ -3,6 +3,7 @@ import { NIL } from "uuid";
 import { SESClient } from "@aws-sdk/client-ses";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
+import { DynamoDBDocumentClient } from "@aws-sdk/lib-dynamodb";
 import { SQSClient } from "@aws-sdk/client-sqs";
 import { BedrockAgentRuntimeClient } from "@aws-sdk/client-bedrock-agent-runtime";
 import { ConfigOptions, getConfigOptions } from "../config";
@@ -33,8 +34,13 @@ export default () => {
       useValue: bedrockAgentClient,
     });
 
-    const dynamoDBClient = new DynamoDBClient() as any;
-    container.register(DynamoDBClient, { useValue: dynamoDBClient });
+    const dynamoDBClient = new DynamoDBClient();
+    const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
+      dynamoDBClient
+    ) as any;
+    container.register(DynamoDBDocumentClient, {
+      useValue: dynamoDBDocumentClient,
+    });
 
     const sesClient = new SESClient() as any;
     container.register(SESClient, { useValue: sesClient });

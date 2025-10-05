@@ -1,4 +1,4 @@
-import ImageMetadataEntity from "./ImageMetadataEntity";
+import ImageMetadataEntity from "./SurveyInfoEntity";
 
 export default class CreateImageMessage {
   imageId: string;
