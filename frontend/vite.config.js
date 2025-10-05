@@ -7,8 +7,8 @@ export default defineConfig(() => {
     server: {
       open: true,
       proxy: {
-        "/ai/api": {
-          target: "http://localhost:8086",
+        "/survai/api": {
+          target: "http://localhost:8094",
           changeOrigin: true,
         },
         "/auth/api": {
@@ -25,7 +25,7 @@ export default defineConfig(() => {
       outDir: "build",
     },
     plugins: [react(), eslint()],
-    base: "/ai",
+    base: "/survai",
     test: {
       globals: true,
       environment: "jsdom",

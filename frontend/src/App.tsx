@@ -20,7 +20,7 @@ const queryClient = new QueryClient();
 
 const router = createBrowserRouter([
   {
-    path: "/ai/chat",
+    path: "/survai/chat",
     element: (
       <PrivateRoute>
         <ChatPage />
@@ -28,7 +28,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/ai/image",
+    path: "/survai/image",
     element: (
       <PrivateRoute>
         <ImagePage />
@@ -36,7 +36,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/ai/pun",
+    path: "/survai/pun",
     element: (
       <PrivateRoute>
         <MainPage />
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/ai/storybook",
+    path: "/survai/storybook",
     element: (
       <PrivateRoute>
         <StorybookPage />
@@ -52,7 +52,7 @@ const router = createBrowserRouter([
     ),
   },
   {
-    path: "/ai",
+    path: "/survai",
     element: (
       <PrivateRoute>
         <MainPage />
