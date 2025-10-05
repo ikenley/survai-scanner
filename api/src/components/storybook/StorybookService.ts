@@ -36,7 +36,7 @@ export default class StorybookService {
     artNote: string
   ): Promise<void> {
     const input = {
-      stateMachineArn: this.config.stateFunctionArn,
+      stateMachineArn: "TODO", //this.config.stateFunctionArn,
       name: this.requestId,
       input: JSON.stringify({
         Title: title,

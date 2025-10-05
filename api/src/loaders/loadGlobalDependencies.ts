@@ -1,6 +1,5 @@
 import { container } from "tsyringe";
 import { NIL } from "uuid";
-import OpenAI from "openai";
 import { SESClient } from "@aws-sdk/client-ses";
 import { CognitoJwtVerifier } from "aws-jwt-verify";
 import { DynamoDBClient } from "@aws-sdk/client-dynamodb";
@@ -42,9 +41,6 @@ export default () => {
 
     const sqsClient = new SQSClient() as any;
     container.register(SQSClient, { useValue: sqsClient });
-
-    const openai = new OpenAI(); // uses OPENAI_API_KEY env var
-    container.register(OpenAI, { useValue: openai });
   } catch (e) {
     LoggerInstance.error("🔥 Error on dependency injector loader: %o", e);
     throw e;

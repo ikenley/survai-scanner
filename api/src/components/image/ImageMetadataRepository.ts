@@ -38,7 +38,7 @@ export default class ImageMetadataRepository {
 
     const dynamoItem = this.toDynamoItem(image);
     const command = new PutItemCommand({
-      TableName: this.config.imageMetadataTableName,
+      TableName: this.config.dyanmo.tableName,
       Item: dynamoItem,
     });
     await this.dynamoDBClient.send(command);
@@ -71,7 +71,7 @@ export default class ImageMetadataRepository {
 
     const dynamoItem = this.toDynamoItem(imageMetadata);
     const command = new PutItemCommand({
-      TableName: this.config.imageMetadataTableName,
+      TableName: this.config.dyanmo.tableName,
       Item: dynamoItem,
     });
     await this.dynamoDBClient.send(command);
@@ -81,7 +81,7 @@ export default class ImageMetadataRepository {
 
   private async getById(imageId: string) {
     const input = {
-      TableName: this.config.imageMetadataTableName,
+      TableName: this.config.dyanmo.tableName,
       Key: {
         imageId: { S: imageId },
       },
