@@ -1,10 +1,10 @@
 import { DependencyContainer, injectable } from "tsyringe";
 import { Request, Response, Router } from "express";
-import { RequestImageParams } from "../../types";
+import { CreateSurveyInfoParams } from "../../types";
 import { ConfigOptions } from "../../config";
 import AuthenticationMiddlewareProvider from "../../auth/AuthenticationMiddlewareProvider";
 import AuthorizationMiddleware from "../../auth/AuthorizationMiddleware";
-import ImageMetadataService from "./ImageMetadataService";
+import ImageMetadataService from "./SurveyService";
 
 const route = Router();
 
@@ -17,7 +17,7 @@ export default class ImageController {
   ) {}
 
   public registerRoutes(app: Router) {
-    app.use("/image", route);
+    app.use("/survey", route);
 
     route.use(this.authenticationMiddlewareProvider.provide());
     route.use(this.authorizationMiddleware.isAuthorized);
@@ -27,10 +27,13 @@ export default class ImageController {
       return container.resolve(ImageMetadataService);
     };
 
-    route.post("/", async (req: Request<{}, {}, RequestImageParams>, res) => {
-      const service = getService(res);
-      await service.publishImageRequest(req.body);
-      res.send({});
-    });
+    route.post(
+      "/",
+      async (req: Request<{}, {}, CreateSurveyInfoParams>, res) => {
+        const service = getService(res);
+        const surveyInfo = await service.createSurveyInfo(req.body);
+        res.send(surveyInfo);
+      }
+    );
   }
 }

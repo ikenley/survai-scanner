@@ -1,12 +1,14 @@
-import { SurveyInfo } from "../../types";
+import { EntityType, SurveyInfo } from "../../types";
 
 export default class SurveyInfoEntity implements SurveyInfo {
   pk: string;
   sk: string;
+  entityType: EntityType;
+  entityKey: string;
 
-  id: string;
+  surveyInfoId: string;
   userId: string;
   name: string;
-  created: Date;
-  modified: Date;
+  created: string;
+  modified: string;
 }

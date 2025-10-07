@@ -1,11 +1,28 @@
 export const CognitoJwtVerifierToken = "CognitoJwtVerifier";
+export const DynamoDBDocumentClientToken = "DynamoDBDocumentClient";
 
-export type SurveyInfo = {
-  id: string;
-  userId: string;
-  name: string;
+export enum EntityType {
+  SurveyInfo = "SurveyInfo",
+  ResponseInfo = "ResponseInfo",
+  ResponseImage = "ResponseImage",
+  AnswerMap = "AnswerMap",
+}
+
+export type BaseEntity = {
+  pk: string;
+  sk: string;
+  entityType: EntityType;
+  entityKey: string;
   created: Date;
   modified: Date;
+};
+
+export type SurveyInfo = {
+  surveyInfoId: string;
+  userId: string;
+  name: string;
+  created: string;
+  modified: string;
 };
 
 export type CreateSurveyInfoParams = {

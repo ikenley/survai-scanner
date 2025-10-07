@@ -8,7 +8,7 @@ import { SQSClient } from "@aws-sdk/client-sqs";
 import { BedrockAgentRuntimeClient } from "@aws-sdk/client-bedrock-agent-runtime";
 import { ConfigOptions, getConfigOptions } from "../config";
 import LoggerInstance, { LoggerToken } from "./logger";
-import { CognitoJwtVerifierToken } from "../types";
+import { CognitoJwtVerifierToken, DynamoDBDocumentClientToken } from "../types";
 import { RequestIdToken } from "../middleware/dependencyInjectionMiddleware";
 
 export default () => {
@@ -38,7 +38,7 @@ export default () => {
     const dynamoDBDocumentClient = DynamoDBDocumentClient.from(
       dynamoDBClient
     ) as any;
-    container.register(DynamoDBDocumentClient, {
+    container.register(DynamoDBDocumentClientToken, {
       useValue: dynamoDBDocumentClient,
     });
 

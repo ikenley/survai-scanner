@@ -20,7 +20,7 @@ export class ConfigOptions {
     userPoolClientSecret: string;
   };
   fromEmailAddress: string;
-  dyanmo: { tableName: string };
+  dyanmo: { tableName: string; userIdIndexName: string };
   imageS3BucketName: string;
   jobQueueUrl: string;
   logs: { level: string };
@@ -49,7 +49,10 @@ export const getConfigOptions = () => {
       userPoolClientId: process.env.COGNITO_USER_POOL_CLIENT_ID!,
       userPoolClientSecret: process.env.COGNITO_USER_POOL_CLIENT_SECRET!,
     },
-    dyanmo: { tableName: process.env.DYNAMO_TABLE_NAME! },
+    dyanmo: {
+      tableName: process.env.DYNAMO_TABLE_NAME!,
+      userIdIndexName: "userId-entityKey-index",
+    },
     fromEmailAddress: process.env.FROM_EMAIL_ADDRESS!,
     jobQueueUrl: process.env.JOB_QUEUE_URL!,
     logs: { level: process.env.LOGS__LEVEL || "http" },

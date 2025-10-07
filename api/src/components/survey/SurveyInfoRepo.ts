@@ -1,50 +1,57 @@
-import { injectable } from "tsyringe";
+import { inject, injectable } from "tsyringe";
 import winston from "winston";
 import { v7 as uuidv7 } from "uuid";
 import {
   DynamoDBDocumentClient,
   PutCommand,
   GetCommand,
+  QueryCommandInput,
+  QueryCommand,
 } from "@aws-sdk/lib-dynamodb";
 import LoggerProvider from "../../utils/LoggerProvider";
 import { ConfigOptions } from "../../config";
 import User from "../../auth/User";
 import SurveyInfoEntity from "./SurveyInfoEntity";
+import { DynamoDBDocumentClientToken, EntityType } from "../../types";
 
 /** Handle database layer interactions */
 @injectable()
-export default class ImageMetadataRepository {
+export default class SurveyInfoRepo {
   private logger: winston.Logger;
 
   constructor(
     protected loggerProvider: LoggerProvider,
     protected config: ConfigOptions,
+    @inject(DynamoDBDocumentClientToken)
     protected dynamoDBDocClient: DynamoDBDocumentClient
   ) {
-    this.logger = loggerProvider.provide("ImageMetadataRepository");
+    this.logger = loggerProvider.provide("SurveyInfoRepo");
   }
 
   /** Submit an image request to the job queue */
   public async insert(name: string, user: User) {
     const id = uuidv7();
-    const image: SurveyInfoEntity = {
+    const now = new Date().toISOString();
+    const surveyInfo: SurveyInfoEntity = {
       pk: `s#${id}`,
       sk: `s#${id}#info`,
-      id,
+      entityType: EntityType.SurveyInfo,
+      entityKey: `s#${id}`,
+      surveyInfoId: id,
       userId: user.id,
       name,
-      created: new Date(),
-      modified: new Date(),
+      created: now,
+      modified: now,
     };
-    this.logger.info("insert", { image });
+    this.logger.info("insert", { surveyInfo });
 
     const command = new PutCommand({
       TableName: this.config.dyanmo.tableName,
-      Item: image,
+      Item: surveyInfo,
     });
     await this.dynamoDBDocClient.send(command);
 
-    return image;
+    return surveyInfo;
   }
 
   /** Converts an ImageMetadataEntity to a DynamoDB Item */
@@ -99,22 +106,40 @@ export default class ImageMetadataRepository {
     return item as SurveyInfoEntity;
   }
 
-  // public async getByUserId(userId: string): Promise<SurveyInfoEntity> {
-  //   const input = {
-  //     TableName: this.config.dyanmo.tableName,
-  //     Key: {
-  //       pk: `s#${id}`,
-  //       sk: `s#${id}#info`,
-  //     },
-  //   };
-  //   const command = new GetCommand(input);
-  //   const response = await this.dynamoDBDocClient.send(command);
-  //   const item = response.Item;
+  public async getByUserId(userId: string): Promise<SurveyInfoEntity[]> {
+    const input: QueryCommandInput = {
+      TableName: this.config.dyanmo.tableName,
+      IndexName: this.config.dyanmo.userIdIndexName,
+      KeyConditionExpression: "pk = :pk AND begins_with(entityKey, :entityKey)",
+      // ExpressionAttributeNames: {
+      //   "#pk": "pk",
+      //   "#entityKey": "entityKey"
+      // },
+      ExpressionAttributeValues: {
+        ":pk": { S: userId },
+        ":entityKey": { S: "s#" },
+      },
+    };
+    return await this.paginateQuery(input);
+  }
 
-  //   if (!item) {
-  //     throw new Error(`No item found with imageId ${id}`);
-  //   }
+  private async paginateQuery<T>(queryParams: QueryCommandInput): Promise<T[]> {
+    let allItems: T[] = [];
+    let lastEvaluatedKey = undefined;
 
-  //   return item as SurveyInfoEntity;
-  // }
+    do {
+      const command: QueryCommand = new QueryCommand({
+        ...queryParams,
+        ExclusiveStartKey: lastEvaluatedKey,
+      });
+
+      const response = await this.dynamoDBDocClient.send(command);
+      if (response.Items) {
+        allItems = allItems.concat(response.Items as T[]);
+      }
+      lastEvaluatedKey = response.LastEvaluatedKey;
+    } while (lastEvaluatedKey);
+
+    return allItems;
+  }
 }
