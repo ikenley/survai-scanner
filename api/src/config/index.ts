@@ -51,7 +51,7 @@ export const getConfigOptions = () => {
     },
     dyanmo: {
       tableName: process.env.DYNAMO_TABLE_NAME!,
-      userIdIndexName: "userId-entityKey-index",
+      userIdIndexName: "userId-entityKey-index-2",
     },
     fromEmailAddress: process.env.FROM_EMAIL_ADDRESS!,
     jobQueueUrl: process.env.JOB_QUEUE_URL!,

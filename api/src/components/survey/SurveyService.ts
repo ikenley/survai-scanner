@@ -1,7 +1,11 @@
 import { injectable } from "tsyringe";
 import winston from "winston";
 import LoggerProvider from "../../utils/LoggerProvider";
-import { CreateSurveyInfoParams, CreateSurveyInfoResponse } from "../../types";
+import {
+  CreateSurveyInfoParams,
+  CreateSurveyInfoResponse,
+  GetSurveysResponse,
+} from "../../types";
 import { ConfigOptions } from "../../config";
 import User from "../../auth/User";
 import SurveyInfoRepo from "./SurveyInfoRepo";
@@ -19,7 +23,7 @@ export default class SurveyService {
     this.logger = loggerProvider.provide("SurveyService");
   }
 
-  /** Submit an image request to the job queue */
+  /** Create a new SurveyInfo */
   public async createSurveyInfo(
     params: CreateSurveyInfoParams
   ): Promise<CreateSurveyInfoResponse> {
@@ -30,5 +34,13 @@ export default class SurveyService {
     this.logger.info(`createSurveyInfo: created`, { surveyInfo });
 
     return { surveyInfo };
+  }
+
+  public async getSurveysByUserId(): Promise<GetSurveysResponse> {
+    this.logger.info("getSurveyInfoByUserId");
+
+    const surveys = await this.surveyInfoRepo.getByUserId(this.user.id);
+
+    return { surveys };
   }
 }

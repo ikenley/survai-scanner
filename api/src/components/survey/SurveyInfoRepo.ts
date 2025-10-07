@@ -110,14 +110,15 @@ export default class SurveyInfoRepo {
     const input: QueryCommandInput = {
       TableName: this.config.dyanmo.tableName,
       IndexName: this.config.dyanmo.userIdIndexName,
-      KeyConditionExpression: "pk = :pk AND begins_with(entityKey, :entityKey)",
+      KeyConditionExpression:
+        "userId = :userId AND begins_with(entityKey, :entityKey)",
       // ExpressionAttributeNames: {
       //   "#pk": "pk",
       //   "#entityKey": "entityKey"
       // },
       ExpressionAttributeValues: {
-        ":pk": { S: userId },
-        ":entityKey": { S: "s#" },
+        ":userId": userId,
+        ":entityKey": "s#",
       },
     };
     return await this.paginateQuery(input);

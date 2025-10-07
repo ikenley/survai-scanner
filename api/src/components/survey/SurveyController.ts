@@ -35,5 +35,11 @@ export default class ImageController {
         res.send(surveyInfo);
       }
     );
+
+    route.get("/", async (_req, res) => {
+      const service = getService(res);
+      const surveys = await service.getSurveysByUserId();
+      res.send(surveys);
+    });
   }
 }
